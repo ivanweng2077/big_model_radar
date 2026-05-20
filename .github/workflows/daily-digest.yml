@@ -2,7 +2,6 @@ name: Daily Big Model Radar
 
 on:
   schedule:
-    # 每天 00:00 UTC = 08:00 CST (UTC+8)
     - cron: "0 0 * * *"
   workflow_dispatch:
 
@@ -10,22 +9,24 @@ permissions:
   contents: write
   issues: write
 
+# 关键：强制使用 Node.js 24 运行 JavaScript Actions
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   digest:
     runs-on: ubuntu-latest
-    # Web content fetching adds ~60-120 s of HTTP requests on incremental runs;
-    # the first-ever run (fetching 50 articles) may need up to 20 min.
     timeout-minutes: 25
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4          # 修正为 v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v4         # 保留 v4，由环境变量强制 Node24
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4        # 修正为 v4
         with:
           node-version: 22
           cache: pnpm
@@ -72,12 +73,3 @@ jobs:
             git pull --rebase
             git push
           fi
-
-      - name: Send Telegram notification
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          DIGEST_REPO: ${{ github.repository }}
-          PAGES_URL: ${{ vars.PAGES_URL || secrets.PAGES_URL }}
-          REPORT_LANGS: ${{ vars.REPORT_LANGS || secrets.REPORT_LANGS }}
-        run: pnpm notify
