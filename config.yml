@@ -84,9 +84,6 @@ openclaw_peers:
   - id: zeptoclaw
     repo: qhkm/zeptoclaw
     name: ZeptoClaw
-  - id: easyclaw
-    repo: gaoyangz77/easyclaw
-    name: EasyClaw
   - id: librefang
     repo: librefang/librefang
     name: librefang
