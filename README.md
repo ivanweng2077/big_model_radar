@@ -1,3 +1,4 @@
-这里有很完整的更新且每天自动生成记录，建议follow 如下仓库
-本仓库暂停更新
+Here are complete updates auto-generated daily. Follow the repo below (this repo is no longer updated):
+
 https://github.com/duanyytop/agents-radar
+
